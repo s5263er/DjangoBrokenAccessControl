@@ -9,11 +9,30 @@
 </head>
 <body>
 
+    {% for message in messages %}
+    <div class = "alert alert-{{message.tags}} alert-dismissible fade show" role = "alert">
+    <strong>Message:</strong> {{message}}
+    <button type="button" class="close" data-dismiss="alert" aria-label = "Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    {% endfor %}
 
+   
     <h3>CS437 PROJECT 7</h3>
-    <button type="submit"> <a href="/register"></a> Sign Up</button>
-    <button type="submit"> <a href="/login"></a> Sign In</button>
-    <button type="submit"> <a href="/logout"></a> Log Out</button>
+
+   
+
+    {% if user.is_authenticated %}
+    <h3>Hello {{fname}}</h3>
+    <button type="submit" onclick="window.location.href='/logout'">Log Out</button>
+
+    {% else %}
+    <button type="submit" onclick="window.location.href='/register'">Sign Up</button>
+    <button type="submit" onclick="window.location.href='/login'">Sign In</button>
+    {%endif%}
+    
+
     <script src = "" async defer></script>
 
 
