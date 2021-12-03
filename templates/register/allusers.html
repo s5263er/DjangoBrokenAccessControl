@@ -1,0 +1,13 @@
+<html>
+    <body>
+        <h3>Admin authorized page</h3>
+        <table border = "1" cellpadding = "5" cellspacing = "5">
+            <td>Username</td>
+            {%for i in data%}
+            <tr>
+                <td>{{i}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>
