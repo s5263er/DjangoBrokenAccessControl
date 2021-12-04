@@ -5,16 +5,19 @@ from . import urls
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.contrib.auth import authenticate
+from django.contrib.auth import REDIRECT_FIELD_NAME, authenticate
 from django.contrib.auth import logout as auth_logout
 from . import decorator
 from django.contrib.auth.models import Group
+from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth import login as auth_login
 
 # Create your views here.
 def home(request):
     return render(request, "register/index.html")
+
+@decorator.logout_required
 def login(request):
     if request.method == "POST":
         username = request.POST['username']
@@ -24,15 +27,14 @@ def login(request):
         if user is not None:
             auth_login(request,user) 
             fname = user.first_name
-            return render(request,"register/index.html", {'fname':fname})
-
+            return render(request,"register/customerpage.html", {'fname':fname})
         else:
-            messages.error(request,"Sen kimsiiinnnnnn cikkk disarii cikkkkkkkkkk")
-            return redirect('home')
+            messages.error(request,"Username or password does not match")
+            return redirect('login')
     return render(request, "register/login.html")
 
+@decorator.logout_required
 def register(request):
-
     if request.method == "POST":
         username = request.POST["username"]
         fname = request.POST["fname"]
@@ -50,13 +52,15 @@ def register(request):
 
         messages.success(request,"Account succesfully created.")
         return redirect('login')
-
     return render(request, "register/register.html")
+
+@login_required(login_url= 'login')
 def logout(request):
     auth_logout(request)
     messages.success(request,"Logged out succesfully")
     return redirect("home")
 
+@login_required(login_url= 'login')
 @decorator.admin_only
 def GetAllUsers(request):
     if request.method == "GET":
@@ -64,6 +68,7 @@ def GetAllUsers(request):
         return render(request,'register/allusers.html', {'data':data})
     return redirect('home')
 
+@login_required(login_url= 'login')
 def CustomerPage(request):
     if request.method == "GET":
-        return render(request, "register/customerpage.html")
+        return render(request, "register/customerpage.html", {'fname': request.user.first_name})

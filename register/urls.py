@@ -9,5 +9,5 @@ urlpatterns = [
     path('login',views.login,name = "login"),
     path('logout',views.logout,name = "logout"),
     path('allusers', views.GetAllUsers, name="allusers"),
-    path('customer', views.CustomerPage, name= "customerpage")
+    path('customer', views.CustomerPage, name= "customer")
 ]
