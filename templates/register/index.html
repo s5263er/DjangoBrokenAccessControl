@@ -24,7 +24,7 @@
    
 
     {% if user.is_authenticated %}
-    <h3>Hello {{fname}}</h3>
+    <h3>Hello {{user}}</h3>
     <button type="submit" onclick="window.location.href='/logout'">Log Out</button>
 
     {% else %}
