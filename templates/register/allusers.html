@@ -1,13 +1,40 @@
+{% include "register/base.html" %}
+{% block body %}
+{%load static %}<!DOCTYPE html>
 <html>
-    <body>
-        <h3>Admin authorized page</h3>
-        <table border = "1" cellpadding = "5" cellspacing = "5">
-            <td>Username</td>
-            {%for i in data%}
+  <head>
+    <meta charset="utf-8">
+    <title>Users</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  </head>
+  <body>
+    <div class="container">
+      <ol class="breadcrumb my-4">
+        <li class="breadcrumb-item active">Users</li>
+      </ol>
+      <table class="table">
+        <thead class="thead-inverse">
+          <tr>
+            <th>username</th>
+            <th>name</th>
+            <th>email</th>
+            <th>is_staff</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
             <tr>
-                <td>{{i}}</td>
+              <td>
+                {{ user }}
+              <td class="align-middle">{{user.first_name}} {{user.last_name}}</td>
+              <td class="align-middle">{{user.email}}</td>
+              <td class="align-middle">{{user.is_staff}}</td>
+              <td></td>
             </tr>
-            {% endfor %}
-        </table>
-    </body>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </body>
 </html>
+{% endblock %}

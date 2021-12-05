@@ -1,5 +1,6 @@
+{% include "register/base.html" %}
+{% block body %}
 <html>
-    <head>CS437 Assignment 1</head>
     <body>
         <h2>Customer Page</h2>
         <br></br>
@@ -7,7 +8,8 @@
         <h3>Hello {{user.first_name}}</h3>
         {% else %}
         <h3>Hello Customer</h3>
-        {%endif%}
         <h4>Login required to access this page</h4>
+        {%endif%}
     </body>
 </html>
+{% endblock %}
