@@ -27,7 +27,7 @@ def login(request):
         if user is not None:
             auth_login(request,user) 
             fname = user.first_name
-            return render(request,"register/customerpage.html", {'fname':fname})
+            return render(request,"register/customerpage.html")
         else:
             messages.error(request,"Username or password does not match")
             return redirect('login')
@@ -71,4 +71,4 @@ def GetAllUsers(request):
 @login_required(login_url= 'login')
 def CustomerPage(request):
     if request.method == "GET":
-        return render(request, "register/customerpage.html", {'fname': request.user.first_name})
+        return render(request, "register/customerpage.html")

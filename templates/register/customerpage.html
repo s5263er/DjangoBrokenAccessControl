@@ -3,7 +3,11 @@
     <body>
         <h2>Customer Page</h2>
         <br></br>
-        <h3>Welcome, {{fname}}</h3>
+        {% if user.is_authenticated %}
+        <h3>Hello {{user.first_name}}</h3>
+        {% else %}
+        <h3>Hello Customer</h3>
+        {%endif%}
         <h4>Login required to access this page</h4>
     </body>
 </html>
