@@ -17,6 +17,7 @@ from django.contrib.auth import login as auth_login
 def home(request):
     return render(request, "register/index.html")
 
+@decorator.referer_required
 @decorator.logout_required
 def login(request):
     if request.method == "POST":
@@ -26,13 +27,13 @@ def login(request):
 
         if user is not None:
             auth_login(request,user) 
-            fname = user.first_name
-            return render(request,"register/customerpage.html")
+            return redirect("home")
         else:
             messages.error(request,"Username or password does not match")
             return redirect('login')
     return render(request, "register/login.html")
 
+@decorator.referer_required
 @decorator.logout_required
 def register(request):
     if request.method == "POST":
@@ -42,32 +43,40 @@ def register(request):
         email = request.POST["email"]
         pass1 = request.POST["pass1"]
         pass2 = request.POST["pass2"]
-        
-        myuser = User.objects.create_user(username,email,pass1)
-        myuser.first_name = fname
-        myuser.last_name = lname
-        myuser.save()
-        mygroup = Group.objects.get(name = "customer")
-        mygroup.user_set.add(myuser)
+        if(pass1 != pass2):
+            messages.error(request,"passwords must match")
+            return redirect('home')
+        try:
+            myuser = User.objects.create_user(username,email,pass1)
+            myuser.first_name = fname
+            myuser.last_name = lname
+            myuser.save()
+            mygroup = Group.objects.get(name = "customer")
+            mygroup.user_set.add(myuser)
 
-        messages.success(request,"Account succesfully created.")
-        return redirect('login')
+            messages.success(request,"Account succesfully created.")
+        except:
+            messages.error(request,"username already exists")
+        return redirect('home')
     return render(request, "register/register.html")
 
+@decorator.referer_required
 @login_required(login_url= 'login')
 def logout(request):
     auth_logout(request)
     messages.success(request,"Logged out succesfully")
     return redirect("home")
 
+@decorator.referer_required
 @login_required(login_url= 'login')
 @decorator.admin_only
 def GetAllUsers(request):
     if request.method == "GET":
-        data = list(User.objects.all())
-        return render(request,'register/allusers.html', {'data':data})
+        users = list(User.objects.all())
+        return render(request,'register/allusers.html', {'users':users})
     return redirect('home')
 
+@decorator.referer_required
 @login_required(login_url= 'login')
 def CustomerPage(request):
     if request.method == "GET":
